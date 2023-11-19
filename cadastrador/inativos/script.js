@@ -1,3 +1,58 @@
+function criarModal(templateId) {
+  const modalId = `visualizarModal-${templateId}`;
+
+  const modal = document.createElement('div');
+  modal.className = 'modal fade';
+  modal.id = modalId;
+  modal.setAttribute('tabindex', '-1');
+  modal.setAttribute('aria-labelledby', `visualizarModalLabel-${templateId}`);
+  modal.setAttribute('aria-hidden', 'true');
+
+  const modalDialog = document.createElement('div');
+  modalDialog.className = 'modal-dialog modal-lg';
+
+  const modalContent = document.createElement('div');
+  modalContent.className = 'modal-content';
+
+  const modalHeader = document.createElement('div');
+  modalHeader.className = 'modal-header';
+  const modalTitle = document.createElement('h5');
+  modalTitle.className = 'modal-title';
+  modalTitle.id = `visualizarModalLabel-${templateId}`;
+  modalTitle.textContent = 'Visualização de Template';
+  const closeButton = document.createElement('button');
+  closeButton.type = 'button';
+  closeButton.className = 'btn-close';
+  closeButton.setAttribute('data-bs-dismiss', 'modal');
+  closeButton.setAttribute('aria-label', 'Close');
+  modalHeader.appendChild(modalTitle);
+  modalHeader.appendChild(closeButton);
+
+  const modalBody = document.createElement('div');
+  modalBody.className = 'modal-body';
+
+  const modalConteudo = document.createElement('div');
+  modalConteudo.id = 'modalConteudo';
+  modalBody.appendChild(modalConteudo);
+
+  const modalFooter = document.createElement('div');
+  modalFooter.className = 'modal-footer';
+  const closeButtonFooter = document.createElement('button');
+  closeButtonFooter.type = 'button';
+  closeButtonFooter.className = 'btn btn-secondary';
+  closeButtonFooter.setAttribute('data-bs-dismiss', 'modal');
+  closeButtonFooter.textContent = 'Fechar';
+  modalFooter.appendChild(closeButtonFooter);
+
+  modalContent.appendChild(modalHeader);
+  modalContent.appendChild(modalBody);
+  modalContent.appendChild(modalFooter);
+  modalDialog.appendChild(modalContent);
+  modal.appendChild(modalDialog);
+
+  return modal;
+}
+
 const navbarToggle = document.querySelector(".navbar-toggler");
 const navbarCollapse = document.querySelector(".navbar-collapse");
 
@@ -132,81 +187,6 @@ window.addEventListener("load", async () => {
       });
     });
   });
-
-  const apagar = document.getElementById('apagar');
-  const buscar = document.getElementById('buscar');
-  const buscaID = document.getElementById('busca-id');
-  const buscaNome = document.getElementById('busca-nome');
-  const buscaCriador = document.getElementById('busca-criador');
-  const buscaExtensao = document.getElementById('busca-extensao');
-
-  buscar.addEventListener('click', async () => {
-    const id = buscaID.value;
-    const nome = buscaNome.value;
-    const criador = buscaCriador.value;
-    const extensao = buscaExtensao.value;
-    let status = localStorage.getItem("status")
-    const usuarioSquad = localStorage.getItem("usuarioSquad")
-    const area_usuario = localStorage.getItem("usuarioArea")
-
-
-    const parametros = {};
-
-    if (id) parametros.id_template = id;
-    if (nome) parametros.nome_template = nome;
-    if (criador) parametros.referencia_nome = criador;
-    if (extensao) parametros.extensao_template = extensao;
-
-    const queryParams = new URLSearchParams(parametros).toString();
-
-    if (Object.keys(parametros).length === 0) {
-      Swal.fire("Nenhum parâmetro de busca fornecido", "", "info");
-      return;
-    }
-
-    const url = `http://localhost:3008/cad/buscarTemplates/${area_usuario}/${usuarioSquad}/${status}?${queryParams}`;
-
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await response.json();
-
-      if (response.status === 200) {
-
-        if (status === 'Ativo') {
-          renderTemplatesAtivos(data.templatesFiltrados);
-        } else if (status === 'Pendente') {
-          renderTemplatesPendentes(data.templatesFiltrados);
-        } else if (status === 'Invalidado') {
-          renderTemplatesInvalidados(data.templatesFiltrados);
-        } else if (status === 'Inativo') {
-          renderTemplatesInativos(data.templatesFiltrados);
-        }
-      } else {
-        Swal.fire("Template não encontrado", "", "error");
-      }
-    } catch (error) {
-      console.error('Erro ao buscar templates:', error);
-    }
-  });
-
-  apagar.addEventListener('click', async () => {
-    let respostaInativo = await buscarTemplateStatus('Inativo', area_usuario, usuarioSquad);
-    renderTemplatesInativos(respostaInativo.resultado);
-    const usuario_squad = document.getElementById('busca-squad');
-
-    if (respostaInativo) {
-      buscaID.value = ''
-      buscaNome.value = ''
-      buscaCriador.value = ''
-      buscaExtensao.value = ''
-      usuario_squad.value = ''
-    }
-  })
 });
 
 async function buscarTemplateStatusPendente(id_usuario, status_template) {
@@ -413,3 +393,142 @@ async function deletarCampo(templateId) {
     console.error("Ocorreu um erro:", error);
   }
 }
+
+const inputBuscaTemplate = document.getElementById("busca-template")
+
+inputBuscaTemplate.addEventListener('input', async () => {
+
+  const area_usuario = localStorage.getItem("usuarioArea");
+  const squad = localStorage.getItem("usuarioSquad");
+
+  let resposta = await buscarTemplateStatus('Inativo', area_usuario, squad);
+
+  const lista = resposta.resultado;
+
+  let valorInput = inputBuscaTemplate.value.trim();
+
+  let filtroTemplates = lista.filter(cliente => {
+    const regex = new RegExp(valorInput, 'i');
+    return (
+      regex.test(cliente.nome_template) ||
+      regex.test(cliente.extensao_template) ||
+      regex.test(cliente.referencia_squad) ||
+      regex.test(cliente.referencia_nome)
+    );
+  });
+
+  if (filtroTemplates.length > 0) {
+    renderTemplatesInativos(filtroTemplates);
+  }
+  else {
+    Swal.fire("Não encontramos templates para a sua busca", "", "error")
+  }
+
+  const itemVisualizar = document.querySelectorAll('.item-visualizar');
+
+  itemVisualizar.forEach((element) => {
+    element.addEventListener('click', async (event) => {
+      event.preventDefault();
+      const templateId = element.getAttribute('data-template-id');
+
+      try {
+        const resultado = await visualizarTemplate(templateId);
+
+        if (resultado.resultadoTemplates && resultado.resultadoTemplates.length > 0) {
+          const camposEtipos = resultado.camposEtipos;
+          const modal = criarModal(templateId);
+          const modalConteudo = modal.querySelector('#modalConteudo');
+
+          modalConteudo.innerHTML = `
+          <p><strong>Status:</strong> ${resultado.resultadoTemplates[0].status_template}</p>
+          <p><strong>Data da Criação:</strong> ${formatarDataComHorario(resultado.resultadoTemplates[0].data_criacao_template)}</p>
+          <p><strong>ID:</strong> ${resultado.resultadoTemplates[0].id_template}</p>
+          <p><strong>Nome do template:</strong> ${resultado.resultadoTemplates[0].nome_template}.${resultado.resultadoTemplates[0].extensao_template}</p>
+          <p><strong>Objetivo do template:</strong> ${resultado.resultadoTemplates[0].objetivo_template}</p>
+          <p><strong>Nome:</strong> ${resultado.resultadoTemplates[0].referencia_nome}</p>
+          <p><strong>Área:</strong> ${resultado.resultadoTemplates[0].referencia_area}</p>
+          <p><strong>Squad:</strong> ${resultado.resultadoTemplates[0].referencia_squad}</p>
+          <p style="color:#209642;font-weight:bold; font-size:20px">Campos</p>
+          <p></p>
+          ${Object.keys(camposEtipos).map((campo, index) => `
+            <p>${campo}: 
+              <strong>Campo:</strong> ${camposEtipos[campo].nome},
+              <strong>Tipo:</strong> ${camposEtipos[campo].tipo}
+            </p>`).join('')}
+        `;
+
+          const visualizarModal = new bootstrap.Modal(modal);
+          visualizarModal.show();
+        } else {
+          console.error('Nenhum resultado de template encontrado.');
+        }
+      } catch (error) {
+        console.error('Erro ao visualizar o template:', error);
+      }
+    });
+  });
+
+  const flexSwitchCheckChecked = document.querySelectorAll('#flexSwitchCheckChecked');
+
+  flexSwitchCheckChecked.forEach((element) => {
+    element.addEventListener("click", async function () {
+      const templateId = element.getAttribute("data-template-id");
+      Swal.fire({
+        title: "Confirma a ativação do template?",
+        inputLabel: "Informe o motivo",
+        showCancelButton: true,
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          if (!flexSwitchCheckChecked.checked) {
+            await ativarTemplate(templateId)
+            Swal.fire("Template ativado", "", "success");
+            setTimeout(function () {
+              window.location.reload()
+            }, 1000);
+          }
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire("Ação cancelada", "", "error");
+          flexSwitchCheckChecked.checked = false;
+        }
+      });
+    });
+  });
+
+  const itemRemover = document.querySelectorAll('.item-remover');
+
+  itemRemover.forEach((element, index) => {
+    element.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const templateId = element.getAttribute("data-template-id");
+
+      Swal.fire({
+        title: "Confirmar a exclusão",
+        inputLabel: "Informe o motivo",
+        showCancelButton: true,
+        confirmButtonText: "Confirmar",
+        cancelButtonText: "Cancelar",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            let respostaCampo = await deletarCampo(templateId);
+
+            if (respostaCampo && respostaCampo.status === 200) {
+              await deletarTemplate(templateId)
+              Swal.fire("Template excluído com sucesso", "", "success");
+              setTimeout(function () {
+                window.location.reload()
+              }, 1200);
+            }
+          } catch (error) {
+            Swal.fire("Erro ao remover", "", "error");
+            console.error(error.message);
+          }
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire("Ação cancelada", "", "error");
+        }
+      });
+    });
+  });
+});
