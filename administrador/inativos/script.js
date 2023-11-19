@@ -136,7 +136,7 @@ window.addEventListener("load", async () => {
           }
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           Swal.fire("Ação cancelada", "", "error");
-          flexSwitchCheckChecked.checked = false;
+          window.location.reload()
         }
       });
     });
@@ -220,81 +220,6 @@ window.addEventListener("load", async () => {
       });
     });
   });
-
-  const apagar = document.getElementById('apagar');
-  const buscar = document.getElementById('buscar');
-  const buscaID = document.getElementById('busca-id');
-  const buscaNome = document.getElementById('busca-nome');
-  const buscaCriador = document.getElementById('busca-criador');
-  const buscaExtensao = document.getElementById('busca-extensao');
-
-  buscar.addEventListener('click', async () => {
-    const id = buscaID.value;
-    const nome = buscaNome.value;
-    const criador = buscaCriador.value;
-    const extensao = buscaExtensao.value;
-    let status = localStorage.getItem("status")
-    const usuarioSquad = localStorage.getItem("usuarioSquad")
-    const area_usuario = localStorage.getItem("usuarioArea")
-
-
-    const parametros = {};
-
-    if (id) parametros.id_template = id;
-    if (nome) parametros.nome_template = nome;
-    if (criador) parametros.referencia_nome = criador;
-    if (extensao) parametros.extensao_template = extensao;
-
-    const queryParams = new URLSearchParams(parametros).toString();
-
-    if (Object.keys(parametros).length === 0) {
-      Swal.fire("Nenhum parâmetro de busca fornecido", "", "info");
-      return;
-    }
-
-    const url = `http://localhost:3008/adm/buscarTemplates/${area_usuario}/${usuarioSquad}/${status}?${queryParams}`;
-
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await response.json();
-
-      if (response.status === 200) {
-
-        if (status === 'Ativo') {
-          renderTemplatesAtivos(data.templatesFiltrados);
-        } else if (status === 'Pendente') {
-          renderTemplatesPendentes(data.templatesFiltrados);
-        } else if (status === 'Invalidado') {
-          renderTemplatesInvalidados(data.templatesFiltrados);
-        } else if (status === 'Inativo') {
-          renderTemplatesInativos(data.templatesFiltrados);
-        }
-      } else {
-        Swal.fire("Template não encontrado", "", "error");
-      }
-    } catch (error) {
-      console.error('Erro ao buscar templates:', error);
-    }
-  });
-
-  apagar.addEventListener('click', async () => {
-    let respostaInativo = await buscarTemplateStatus('Inativo', area_usuario, usuarioSquad);
-    renderTemplatesInativos(respostaInativo.resultado);
-    const usuario_squad = document.getElementById('busca-squad');
-
-    if (respostaInativo) {
-      buscaID.value = ''
-      buscaNome.value = ''
-      buscaCriador.value = ''
-      buscaExtensao.value = ''
-      usuario_squad.value = ''
-    }
-  })
 });
 
 async function buscarInformacoesDoUsuario() {
@@ -584,8 +509,10 @@ inputBuscaTemplate.addEventListener('input', async () => {
             }, 1000);
           }
         } else if (result.dismiss === Swal.DismissReason.cancel) {
-          Swal.fire("Ação cancelada", "", "error");
-          flexSwitchCheckChecked.checked = false;
+          if (flexSwitchCheckChecked.checked) {
+            Swal.fire("Ação cancelada", "", "error");
+            flexSwitchCheckChecked.checked = "false"
+          }
         }
       });
     });
