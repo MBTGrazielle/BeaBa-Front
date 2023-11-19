@@ -76,37 +76,8 @@
   justify-content: center;
 }
 
-#busca-status,
-#busca-id,
-#busca-nome,
-#busca-extensao,
-#busca-criador,
-#buscar,
-#apagar {
-  width: 220px;
-  height: 40px;
-  margin-left: 5px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-#busca-id {
-  margin-left: -2px;
-}
-#buscar,
-#apagar {
-  background-color: #eeeeee !important;
-  padding: 10px;
-  border: none !important;
-  border-radius: 5px;
-  font-size: 16px;
-  width: 50px;
-}
-
-#buscar:hover,
-#apagar:hover {
-  background-color: #209642 !important;
-  color: #ffffff;
+#busca-template {
+  width: 40%;
 }
 
 input[type="text"],

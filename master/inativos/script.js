@@ -113,7 +113,6 @@ window.addEventListener("load", async () => {
     retornoMensagemInativo.style.marginLeft = "400px";
   }
 
-
   const flexSwitchCheckChecked = document.getElementById('flexSwitchCheckChecked');
 
   flexSwitchCheckChecked.addEventListener("click", async function () {
@@ -413,8 +412,6 @@ async function deletarCampo(templateId) {
   }
 }
 
-
-
 const inputBuscaTemplate = document.getElementById("busca-template")
 
 inputBuscaTemplate.addEventListener('input', async () => {
@@ -521,6 +518,32 @@ inputBuscaTemplate.addEventListener('input', async () => {
           Swal.fire("Ação cancelada", "", "error");
         }
       });
+    });
+  });
+
+  const flexSwitchCheckChecked = document.getElementById('flexSwitchCheckChecked');
+
+  flexSwitchCheckChecked.addEventListener("click", async function () {
+    const templateId = flexSwitchCheckChecked.getAttribute("data-template-id");
+    Swal.fire({
+      title: "Confirma a ativação do template?",
+      inputLabel: "Informe o motivo",
+      showCancelButton: true,
+      confirmButtonText: "Confirmar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        if (flexSwitchCheckChecked.checked) {
+          await ativarTemplate(templateId)
+          Swal.fire("Template ativado", "", "success");
+          setTimeout(function () {
+            window.location.reload()
+          }, 1000);
+        }
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire("Ação cancelada", "", "error");
+        flexSwitchCheckChecked.checked = false;
+      }
     });
   });
 });
