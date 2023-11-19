@@ -1,0 +1,39 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.header-login h2{
+    color: #258A42;
+}
+
+#matricula::placeholder, #password::placeholder {
+    color: #cecece; 
+}
+
+.btn-custom {
+    background-color: #258A42;
+    color: #fff; 
+    border: none; 
+    padding: 10px 20px; 
+    cursor: pointer; 
+    border-radius: 6px;
+    width: 50%;
+}
+
+.btn-custom:hover {
+    background-color: #0f6e31;
+}
+
+.imagem-quero{
+    background-color: #258A42;
+}
+
+.imagem-quero h5{
+    color: #FDEC01;
+}
+
+.imagem-quero p{
+    color: #94C29D;
+}

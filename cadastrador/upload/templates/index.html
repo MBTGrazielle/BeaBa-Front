@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset=" UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload</title>
+  <link rel="stylesheet" href="../static/styles.css" />
+  <script src="./script.js" defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+Rkb5lyo8r3O6W5VCEb3tPGp+OqzBzVtPc8kI5q5cC5i6U7j" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg menu fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand ms-5" href="#"><img src="../../assets/logotipo.png" alt="logotipo"></a>
+      <a id="tipoAcesso" class="nav-link disabled text-white ms-5" aria-current="page"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse show ms-5" id="navbarSupportedContent">
+        <div class="w-100 ms-5 d-flex flex-column flex-lg-row justify-content-between align-items-center">
+          <div class="d-flex w-50    justify-content-around align-items-center">
+
+            <div class="btn-primary position-relative notification-icon d-flex align-items-center">
+              <img src="../../assets/icone-notificacao.svg" alt="icone-notificacao" />
+              <span class="translate-middle badge rounded-pill bg-danger qtd-pendente">
+              </span>
+            </div>
+          </div>
+
+          <div class="profile-image d-flex align-items-center">
+            <img id="usuarioImagem" alt="imagem-perfil">
+            <div class="d-flex ms-4 flex-column mt-3 pe-5">
+              <strong id="nomeUsuario"></strong>
+              <p id="usuarioSquad"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <div id="mySidebar" class="sidebar mt-5">
+    <ul class="nav flex-column mt-5">
+      <li class="nav-item mt-5">
+        <a class="nav-link " href="../../dashboard/templates/index.html">
+          <i class="fas fa-tachometer-alt me-3 ms-4"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="../../usuarios/usuarios/index.html">
+          <i class="fas fa-user me-3 ms-4"></i> Usuários
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="../../pagTemplates/listaTemplates/index.html">
+          <i class="fas fa-file me-3 ms-4"></i> Templates
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="../../inativos/index.html">
+          <i class="fas fa-ban me-3 ms-4"></i> Inativos
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link menu-confPerfil" href="../../usuarios/meuPerfil/index.html">
+          <i class="fas fa-user me-3 ms-4"></i> Meu Perfil
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="btnDeslogar" href="#">
+          <i class="fas fa-sign-out-alt me-3 ms-4"></i> Sair
+        </a>
+      </li>
+    </ul>
+  </div>
+
+
+  <main class="d-flex">
+
+    <section class="p-5">
+      <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb" class="ps-3">
+        <ol class="breadcrumb fs-6">
+          <li class="breadcrumb-item active">Upload</li>
+          <li class="breadcrumb-item active" aria-current="page">Cadastrar</li>
+        </ol>
+      </nav>
+      <label for="input-id">Id do template</label><br>
+      <input id="input-id" onclick="return false" readonly class="upload-id"  type="text">
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="userAccountSetupForm">
+          <input type="file" id="fileInput" class="custom-file-input" accept=".csv, .xlsx, .xls">
+        </form>
+        <button type="submit" class="btn btn-primary" id="btn-envia">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+     <div class="escolhaDiretorio"> 
+      <h4>Upload do arquivo</h4>
+      <h6>Orientações Gerais</h6>
+      <ol>
+        <li>Escolha o diretório destinado à hospedagem do seu arquivo e salve-o.</li>
+        <li>Selecione o arquivo que deseja realizar o upload.</li>
+        <li>Ao enviar, o seu arquivo será verificado e feito o upload ao repositório.</li>
+      </ol>
+      <label class="label-upload-repositorio"> Escolha o repositório</label><br>
+      <select class="select-upload">
+        <option class="opcao" value="Selecione">Selecione</option>
+        <option class="opcao" value="Projetos">Projetos</option>
+        <option class="opcao" value="Temporarios">Temporários</option>
+        <option class="opcao" value="Modelos">Modelos</option>
+        <option class="opcao" value="Relatorios">Relatórios</option>
+        <option class="opcao" value="Backup">Backup</option>
+      </select><br>
+      <button type="button" class="btn btn-primary btn-diretorio px-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Salvar diretório
+      </button>
+     </div>
+    </section>
+
+  </main>
+</body>
+
+</html>

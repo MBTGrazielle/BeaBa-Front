@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset=" UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../static/styles.css">
+    <script src="./script.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg menu fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-5" href="https://www.queroquero.com.br/"><img src="../assets/logotipo.png"
+                    alt="logotipo"></a>
+            <a id="tipoAcesso" class="nav-link disabled text-white ms-5" aria-current="page"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="w-100 ms-5 d-flex flex-column flex-lg-row justify-content-between align-items-center">
+                <div class="d-flex w-50    justify-content-around align-items-center">
+                    <div class="btn-primary position-relative notification-icon d-flex align-items-center">
+                        <img href="" title="Template pendente" src="../assets/icone-notificacao.svg"
+                            alt="icone-notificacao" />
+                        <span class="translate-middle badge rounded-pill bg-danger qtd-pendente">
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="profile-image d-flex align-items-center">
+                    <img id="usuarioImagem" alt="imagem-perfil">
+                    <div class="d-flex ms-4 flex-column mt-3 pe-5">
+                        <strong id="nomeUsuario"></strong>
+                        <p id="usuarioSquad"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </nav>
+
+    <div id="mySidebar" class="sidebar mt-5">
+        <ul class="nav flex-column mt-5">
+            <li class="nav-item mt-5">
+                <a class="nav-link active " href="#">
+                    <i class="fas fa-tachometer-alt me-3 ms-4"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="../../usuarios/usuarios/index.html">
+                    <i class="fas fa-user me-3 ms-4"></i> Usuários
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../../pagTemplates/listaTemplates/index.html">
+                    <i class="fas fa-file me-3 ms-4"></i> Templates
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../../inativos/index.html">
+                    <i class="fas fa-ban me-3 ms-4"></i> Inativos
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link menu-confPerfil" href="../../usuarios/meuPerfil/index.html">
+                    <i class="fas fa-user me-3 ms-4"></i> Meu Perfil
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="btnDeslogar" href="#">
+                    <i class="fas fa-sign-out-alt me-3 ms-4"></i> Sair
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <main>
+        <h4 class="titulo-dashboard">Arquivos Enviados</h4>
+        <table id="tabela-upload" class="table">
+            <thead>
+                <tr>
+                    <th>ID </th>
+                    <th>Data</th>
+                    <th>Nome do Arquivo</th>
+                    <th>Download</th>
+                    <th>Template</th>
+                    <th>ID do usuário</th>
+                    <th>Nome do usuário</th>
+                    <th>Squad</th>
+                    <th>Diretório</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item" id="pagina-anterior">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" id="pagina-seguinte">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <span id="pagina-atual">Página 1 de 1</span>
+        <span id="retorno1"></span>
+    </main>
+    </main>
+</body>
+
+</html>

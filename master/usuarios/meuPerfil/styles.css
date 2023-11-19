@@ -1,0 +1,189 @@
+* {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+.form-id:hover {
+  cursor: not-allowed
+}
+
+#negrito {
+  font-weight: bold;
+}
+
+.edit-icon {
+  margin: -55px 0px 0px 72px;
+  color: #eeeeee;
+}
+
+.custom-cursor:hover {
+  cursor: not-allowed;
+}
+
+.notification-icon,
+.edit-icon {
+  cursor: pointer;
+}
+
+.menu-perfil {
+  margin-top: 6rem;
+}
+
+
+#id-usuario,
+#area {
+  font-weight: bold;
+  cursor: not-allowed;
+}
+
+#matricula-usuario::placeholder,
+#pesquisa-menu::placeholder {
+  color: #a3a1a1;
+}
+
+.icon {
+  cursor: pointer;
+  user-select: none;
+  font-size: 20px;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #000;
+}
+
+.img-perfil {
+  border-radius: 50%;
+  width: 90px;
+}
+
+
+.circle-container,
+.img-perfil:hover {
+  cursor: pointer;
+  width: 160px;
+}
+
+*/::placeholder {
+  font-size: 13px;
+  color: #a3a1a1
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+#form-formato,
+textarea,
+input[type="search"] {
+  background-color: #eeeeee !important;
+  padding: 10px;
+  border: none !important;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 100%;
+  padding: 12px;
+}
+
+select {
+  background-color: #eeeeee !important;
+  border: none !important;
+  height: 47px;
+}
+
+input[type="file"] {
+  margin-bottom: 20px;
+}
+
+.menu {
+  background-color: #333;
+  color: #fff;
+}
+
+.admin-info p {
+  font-weight: bold;
+  margin: 0;
+}
+
+#btn-gerenciar {
+  background-color: #209642;
+  color: #FFFFFF;
+  font-weight: 300;
+  border-color: #eeeeee;
+}
+
+#btn-gerenciar:hover {
+  background-color: #0f6e31 !important;
+}
+
+#mostrarSenha:hover {
+  background: #209642;
+}
+
+.profile-image img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.btn-success {
+  background-color: #209642 !important;
+  border: none
+}
+
+.btn-success:hover {
+  background-color: #0f6e31 !important;
+}
+
+.nav-link.active {
+  background-color: rgba(5, 58, 20, 0.5);
+}
+
+/* MAIN CORPO */
+
+main {
+  position: absolute;
+  height: calc(100% - 100px);
+  top: 100px;
+  left: 228px;
+  padding-left: 5px;
+}
+
+/* SIDEBAR */
+#mySidebar {
+  background-color: #209642;
+  min-width: 250px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+}
+
+#mySidebar a {
+  padding: 15px 25px;
+  text-decoration: none;
+  font-size: 18px;
+  color: #fff;
+  display: block;
+  transition: 0.2s;
+  text-align: left;
+}
+
+#mySidebar a:hover {
+  background-color: #0f6e31;
+}
+
+main section {
+  width: calc(100vw - 250px);
+
+}
+
+/* SIDEBAR */
+
+.notification-icon span {
+  background-color: rebeccapurple;
+  position: absolute;
+  left: 30px;
+}

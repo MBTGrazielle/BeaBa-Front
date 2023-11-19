@@ -1,0 +1,116 @@
+.nav-tabs {
+  border: none;
+  background-color: none !important;
+  border-bottom: 7px solid #333 !important;
+  width: 100%;
+}
+
+.nav-item {
+  min-width: 33.31%;
+}
+
+.nav-item .nav-link {
+  width: 100%;
+}
+
+.nav-card .dropdown-item:hover {
+  background-color: #209642;
+  color: #FFFFFF;
+}
+
+.teste {
+  margin-left: 40px;
+}
+
+.nav-tabs,
+.nav-tabs {
+  background-color: rgb(238, 238, 238);
+  border: none;
+  border-bottom: 7px solid #333 !important;
+}
+
+.nav-link-ativo:hover,
+.nav-link-ativo.active {
+  border-bottom: 7px solid #209642 !important;
+}
+
+.nav-link-pendente:hover,
+.nav-link-pendente.active {
+  border-bottom: 7px solid #ffd700 !important;
+}
+
+.nav-link-invalido:hover,
+.nav-link-invalido.active {
+  border-bottom: 7px solid #dc3545 !important;
+}
+
+.nav-tabs .nav-item .nav-link.active {
+  background-color: transparent;
+  border: none;
+}
+
+.nav-tabs {
+  border: none !important;
+  background-color: #f8f8f8 !important;
+  border-radius: 5px;
+  justify-content: space-around;
+}
+
+/* CARD */
+
+.cardTemplate {
+  background-color: #efefef;
+  min-width: 200px;
+}
+
+/* paginação */
+
+.pagination .page-link {
+  background-color: #ffffff;
+  border-color: #209642;
+  color: #209642;
+  /* Cor do texto */
+}
+
+.pagination .page-link:hover {
+  background-color: #209642 !important;
+  border-color: #0f6e31;
+  color: #ffffff;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #209642 !important;
+  border-color: #209642 !important;
+  color: #ffffff !important;
+}
+
+.navbar-toggler {
+  background: white !important;
+}
+
+@media screen and (max-width: 767px) {
+  .cardTemplate {
+    font-size: 11px !important;
+  }
+
+  .cardTemplate span {
+    font-size: 11px !important;
+  }
+
+  .cardTemplate i {
+    font-size: 11px !important;
+  }
+}
+
+/* Estilos para telas médias e grandes */
+@media screen and (min-width: 768px) {
+  .cardTemplate h4 {
+    font-size: 20px;
+    /* Defina o tamanho de fonte desejado */
+  }
+
+  .cardTemplate p {
+    font-size: 16px;
+    /* Defina o tamanho de fonte desejado */
+  }
+}
