@@ -1570,7 +1570,7 @@ inputBuscaTemplate.addEventListener('input', async () => {
         cancelButtonText: "Cancelar",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          if (!element.checked) {
+          if (element.checked) {
             await inativarTemplate(templateId)
             Swal.fire("Template inativado", "", "success");
             setTimeout(function () {

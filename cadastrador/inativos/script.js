@@ -412,7 +412,6 @@ inputBuscaTemplate.addEventListener('input', async () => {
     return (
       regex.test(cliente.nome_template) ||
       regex.test(cliente.extensao_template) ||
-      regex.test(cliente.referencia_squad) ||
       regex.test(cliente.referencia_nome)
     );
   });

@@ -372,7 +372,6 @@ window.addEventListener("load", async function () {
       });
     });
   })
-
 });
 
 async function buscarTemplateStatusPendente(id_usuario, status_template) {

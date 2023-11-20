@@ -488,33 +488,29 @@ inputBuscaTemplate.addEventListener('input', async () => {
     });
   });
 
-  const flexSwitchCheckChecked = document.querySelectorAll('#flexSwitchCheckChecked');
+  const flexSwitchCheckChecked = document.getElementById('flexSwitchCheckChecked');
 
-  flexSwitchCheckChecked.forEach((element) => {
-    element.addEventListener("click", async function () {
-      const templateId = element.getAttribute("data-template-id");
-      Swal.fire({
-        title: "Confirma a ativação do template?",
-        inputLabel: "Informe o motivo",
-        showCancelButton: true,
-        confirmButtonText: "Confirmar",
-        cancelButtonText: "Cancelar",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          if (!flexSwitchCheckChecked.checked) {
-            await ativarTemplate(templateId)
-            Swal.fire("Template ativado", "", "success");
-            setTimeout(function () {
-              window.location.reload()
-            }, 1000);
-          }
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          if (flexSwitchCheckChecked.checked) {
-            Swal.fire("Ação cancelada", "", "error");
-            flexSwitchCheckChecked.checked = "false"
-          }
+  flexSwitchCheckChecked.addEventListener("click", async function () {
+    const templateId = flexSwitchCheckChecked.getAttribute("data-template-id");
+    Swal.fire({
+      title: "Confirma a ativação do template?",
+      inputLabel: "Informe o motivo",
+      showCancelButton: true,
+      confirmButtonText: "Confirmar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        if (flexSwitchCheckChecked.checked) {
+          await ativarTemplate(templateId)
+          Swal.fire("Template ativado", "", "success");
+          setTimeout(function () {
+            window.location.reload()
+          }, 1000);
         }
-      });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire("Ação cancelada", "", "error");
+        flexSwitchCheckChecked.checked = false;
+      }
     });
   });
 
