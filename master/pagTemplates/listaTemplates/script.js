@@ -73,6 +73,18 @@ document.getElementById("btnDeslogar").addEventListener("click", function (e) {
   window.location.href = "../../../login/index.html";
 });
 
+let currentPage = 1;
+const itemsPerPage = 4;
+let data = [];
+
+let currentPagePendente = 1;
+const itemsPerPagePendente = 4;
+let dataPendente = [];
+
+let currentPageInvalidado = 1;
+const itemsPerPageInvalidado = 4;
+let dataInvalidado = [];
+
 const retornoMensagem = document.getElementById('template-container')
 const retornoMensagemPendente = document.getElementById('template-container-pendente')
 const retornoMensagemInvalidado = document.getElementById('template-container-invalidado')
@@ -86,11 +98,17 @@ window.addEventListener("load", async function () {
   const area_usuario = localStorage.getItem("usuarioArea")
 
   let respostaAtivo = await buscarTemplateStatus('Ativo', area_usuario);
+  data = respostaAtivo.resultado;
 
-  renderTemplatesAtivos(respostaAtivo.resultado);
+  renderTemplatesAtivos(data);
+  atualizarControlesPagina();
 
   if (respostaAtivo.status === 404) {
     Swal.fire("Não há templates ativos", "", "info");
+    const paginaAtual = document.getElementById("pagina-atual")
+    const pagination = document.querySelector(".pagination")
+    paginaAtual.style.display = "none"
+    pagination.style.display = "none"
     retornoMensagem.innerHTML = "Não há templates ativos"
     retornoMensagem.style.color = "red";
     retornoMensagem.style.fontWeight = "bold";
@@ -457,6 +475,10 @@ async function atualizarListaTemplatesValidados() {
   renderTemplatesAtivos(respostaAtivo.resultado);
 
   if (respostaAtivo.resultado.length === 0) {
+    const paginaAtual = document.getElementById("pagina-atual")
+    const pagination = document.querySelector(".pagination")
+    paginaAtual.style.display = "none"
+    pagination.style.display = "none"
     Swal.fire("Não há templates ativos", "", "info");
     retornoMensagem.innerHTML = "Não há templates ativos"
     retornoMensagem.style.color = "red";
@@ -753,12 +775,17 @@ async function atualizarListaTemplatesPendentes() {
   const id_usuario = localStorage.getItem("usuarioId");
 
   let respostaPendente = await buscarTemplateStatus('Pendente', area_usuario);
-  console.log(respostaPendente)
+  dataPendente = respostaPendente.resultado;
 
-  renderTemplatesPendentes(respostaPendente.resultado);
+  renderTemplatesPendentes(dataPendente);
+  atualizarControlesPaginaPendente();
 
   if (respostaPendente.status === 404) {
     Swal.fire("Não há templates pendentes", "", "info");
+    const paginaAtual = document.getElementById("pagina-atual-pendente")
+    const pagination = document.querySelector(".pagination")
+    paginaAtual.style.display = "none"
+    pagination.style.display = "none"
     retornoMensagemPendente.innerHTML = "Não há templates pendentes";
     retornoMensagemPendente.style.color = "red";
     retornoMensagemPendente.style.fontWeight = "bold";
@@ -1049,10 +1076,17 @@ async function atualizarListaTemplatesInvalidados() {
   const area_usuario = localStorage.getItem("usuarioArea")
 
   let respostaInvalidado = await buscarTemplateStatus('Invalidado', area_usuario);
-  renderTemplatesInvalidados(respostaInvalidado.resultado);
+  dataInvalidado = respostaInvalidado.resultado;
+
+  renderTemplatesInvalidados(dataInvalidado);
+  atualizarControlesPaginaInvalidado();
 
   if (respostaInvalidado.resultado.length === 0) {
     Swal.fire("Não há templates invalidados", "", "info");
+    const paginaAtual = document.getElementById("pagina-atual-invalidado")
+    const pagination = document.querySelector(".pagination")
+    paginaAtual.style.display = "none"
+    pagination.style.display = "none"
     retornoMensagemInvalidado.innerHTML = "Não há templates invalidados";
     retornoMensagemInvalidado.style.color = "red";
     retornoMensagemInvalidado.style.fontWeight = "bold";
@@ -1362,33 +1396,139 @@ function createTemplateElementInvalido(template) {
   return templateHTMLInvalidado;
 }
 
+function atualizarControlesPagina() {
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const paginaAnterior = document.getElementById('pagina-anterior-ativo');
+  const paginaSeguinte = document.getElementById('pagina-seguinte-ativo');
+  const paginaAtual = document.getElementById('pagina-atual');
+
+  paginaAnterior.disabled = currentPage === 1;
+  paginaSeguinte.disabled = currentPage === totalPages;
+  paginaAtual.textContent = `Página ${currentPage} de ${totalPages}`;
+}
+
+function atualizarControlesPaginaPendente() {
+  const totalPages = Math.ceil(dataPendente.length / itemsPerPagePendente);
+  const paginaAnterior = document.getElementById('pagina-anterior-pendente');
+  const paginaSeguinte = document.getElementById('pagina-seguinte-pendente');
+  const paginaAtual = document.getElementById('pagina-atual-pendente');
+
+  paginaAnterior.disabled = currentPagePendente === 1;
+  paginaSeguinte.disabled = currentPagePendente === totalPages;
+  paginaAtual.textContent = `Página ${currentPagePendente} de ${totalPages}`;
+}
+
+function atualizarControlesPaginaInvalidado() {
+  const totalPages = Math.ceil(dataInvalidado.length / itemsPerPageInvalidado);
+  const paginaAnterior = document.getElementById('pagina-anterior-invalidado');
+  const paginaSeguinte = document.getElementById('pagina-seguinte-invalidado');
+  const paginaAtual = document.getElementById('pagina-atual-invalidado');
+
+  paginaAnterior.disabled = currentPageInvalidado === 1;
+  paginaSeguinte.disabled = currentPageInvalidado === totalPages;
+  paginaAtual.textContent = `Página ${currentPageInvalidado} de ${totalPages}`;
+}
+
+function irParaPaginaAnterior() {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTemplatesAtivos(data);
+    atualizarControlesPagina();
+  }
+}
+
+function irParaPaginaSeguinte() {
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTemplatesAtivos(data);
+    atualizarControlesPagina();
+  }
+}
+
+function irParaPaginaAnteriorPendente() {
+  if (currentPagePendente > 1) {
+    currentPagePendente--;
+    renderTemplatesPendentes(dataPendente);
+    atualizarControlesPaginaPendente();
+  }
+}
+
+function irParaPaginaSeguintePendente() {
+  const totalPages = Math.ceil(dataPendente.length / itemsPerPagePendente);
+  if (currentPagePendente < totalPages) {
+    currentPagePendente++;
+    renderTemplatesPendentes(dataPendente);
+    atualizarControlesPaginaPendente();
+  }
+}
+
+function irParaPaginaAnteriorInvalidado() {
+  if (currentPageInvalidado > 1) {
+    currentPageInvalidado--;
+    renderTemplatesInvalidados(dataInvalidado);
+    atualizarControlesPaginaInvalidado();
+  }
+}
+
+function irParaPaginaSeguinteInvalidado() {
+  const totalPages = Math.ceil(dataInvalidado.length / itemsPerPageInvalidado);
+  if (currentPageInvalidado < totalPages) {
+    currentPageInvalidado++;
+    renderTemplatesInvalidados(dataInvalidado);
+    atualizarControlesPaginaInvalidado();
+  }
+}
+
 function renderTemplatesAtivos(templates) {
   const templateContainerAtivo = document.getElementById('template-container');
-
   templateContainerAtivo.innerHTML = '';
-  templates.forEach((template) => {
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const templatesToRender = templates.slice(startIndex, endIndex);
+
+  templatesToRender.forEach((template) => {
     const templateElement = createTemplateElementAtivo(template);
     templateContainerAtivo.innerHTML += templateElement;
   });
 }
 
+
+document.getElementById('pagina-anterior-ativo').addEventListener('click', irParaPaginaAnterior);
+document.getElementById('pagina-seguinte-ativo').addEventListener('click', irParaPaginaSeguinte);
+
+document.getElementById('pagina-anterior-pendente').addEventListener('click', irParaPaginaAnteriorPendente);
+document.getElementById('pagina-seguinte-pendente').addEventListener('click', irParaPaginaSeguintePendente);
+
+document.getElementById('pagina-anterior-invalidado').addEventListener('click', irParaPaginaAnteriorInvalidado);
+document.getElementById('pagina-seguinte-invalidado').addEventListener('click', irParaPaginaSeguinteInvalidado);
+
 function renderTemplatesPendentes(templates) {
   const templateContainerPendente = document.getElementById('template-container-pendente');
-
   templateContainerPendente.innerHTML = '';
-  templates.forEach((templatePendente) => {
-    const templateElementPendente = createTemplateElementPendente(templatePendente);
-    templateContainerPendente.innerHTML += templateElementPendente;
+
+  const startIndex = (currentPagePendente - 1) * itemsPerPagePendente;
+  const endIndex = startIndex + itemsPerPagePendente;
+  const templatesToRender = templates.slice(startIndex, endIndex);
+
+  templatesToRender.forEach((template) => {
+    const templateElement = createTemplateElementPendente(template);
+    templateContainerPendente.innerHTML += templateElement;
   });
 }
 
 function renderTemplatesInvalidados(templates) {
   const templateContainerInvalidado = document.getElementById('template-container-invalidado');
-
   templateContainerInvalidado.innerHTML = '';
-  templates.forEach((templateInvalidado) => {
-    const templateElementInvalidado = createTemplateElementInvalido(templateInvalidado);
-    templateContainerInvalidado.innerHTML += templateElementInvalidado;
+
+  const startIndex = (currentPageInvalidado - 1) * itemsPerPageInvalidado;
+  const endIndex = startIndex + itemsPerPageInvalidado;
+  const templatesToRender = templates.slice(startIndex, endIndex);
+
+  templatesToRender.forEach((template) => {
+    const templateElement = createTemplateElementInvalido(template);
+    templateContainerInvalidado.innerHTML += templateElement;
   });
 }
 
@@ -1570,7 +1710,7 @@ inputBuscaTemplate.addEventListener('input', async () => {
         cancelButtonText: "Cancelar",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          if (element.checked) {
+          if (!element.checked) {
             await inativarTemplate(templateId)
             Swal.fire("Template inativado", "", "success");
             setTimeout(function () {

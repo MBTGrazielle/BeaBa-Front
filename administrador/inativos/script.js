@@ -52,6 +52,11 @@ function criarModal(templateId) {
 
   return modal;
 }
+
+let currentPageInativo = 1;
+const itemsPerPageInativo = 4;
+let dataInativo = [];
+
 const navbarToggle = document.querySelector(".navbar-toggler");
 const navbarCollapse = document.querySelector(".navbar-collapse");
 
@@ -100,12 +105,17 @@ window.addEventListener("load", async () => {
 
   let respostaInativo = await buscarTemplateStatus('Inativo', area_usuario, usuarioSquad);
 
-  console.log(respostaInativo)
+  dataInativo = respostaInativo.resultado;
 
-  renderTemplatesInativos(respostaInativo.resultado);
+  renderTemplatesInativos(dataInativo);
+  atualizarControlesPagina();
 
   if (respostaInativo.status === 404) {
     Swal.fire("Não há templates inativos", "", "info");
+    const paginaAtual = document.getElementById("pagina-atual-inativo")
+    const pagination = document.querySelector(".pagination")
+    paginaAtual.style.display = "none"
+    pagination.style.display = "none"
     retornoMensagemInativo.innerHTML = "Não há templates inativos"
     retornoMensagemInativo.style.color = "red";
     retornoMensagemInativo.style.fontWeight = "bold";
@@ -353,14 +363,19 @@ function createTemplateElementInativo(template) {
 }
 
 function renderTemplatesInativos(templates) {
-  const templateContainerInativos = document.getElementById('template-container');
+  const templateContainerInativo = document.getElementById('template-container');
+  templateContainerInativo.innerHTML = '';
 
-  templateContainerInativos.innerHTML = '';
-  templates.forEach((template) => {
+  const startIndex = (currentPageInativo - 1) * itemsPerPageInativo;
+  const endIndex = startIndex + itemsPerPageInativo;
+  const templatesToRender = templates.slice(startIndex, endIndex);
+
+  templatesToRender.forEach((template) => {
     const templateElement = createTemplateElementInativo(template);
-    templateContainerInativos.innerHTML += templateElement;
+    templateContainerInativo.innerHTML += templateElement;
   });
 }
+
 
 function formatarDataComHorario(data) {
   const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
@@ -413,6 +428,37 @@ async function deletarCampo(templateId) {
     console.error("Ocorreu um erro:", error);
   }
 }
+
+function atualizarControlesPagina() {
+  const totalPages = Math.ceil(dataInativo.length / itemsPerPageInativo);
+  const paginaAnterior = document.getElementById('pagina-anterior-inativo');
+  const paginaSeguinte = document.getElementById('pagina-seguinte-inativo');
+  const paginaAtual = document.getElementById('pagina-atual-inativo');
+
+  paginaAnterior.disabled = currentPageInativo === 1;
+  paginaSeguinte.disabled = currentPageInativo === totalPages;
+  paginaAtual.textContent = `Página ${currentPageInativo} de ${totalPages}`;
+}
+
+function irParaPaginaAnterior() {
+  if (currentPageInativo > 1) {
+    currentPageInativo--;
+    renderTemplatesInativos(dataInativo);
+    atualizarControlesPagina();
+  }
+}
+
+function irParaPaginaSeguinte() {
+  const totalPages = Math.ceil(dataInativo.length / itemsPerPageInativo);
+  if (currentPageInativo < totalPages) {
+    currentPageInativo++;
+    renderTemplatesInativos(dataInativo);
+    atualizarControlesPagina();
+  }
+}
+
+document.getElementById('pagina-anterior-inativo').addEventListener('click', irParaPaginaAnterior);
+document.getElementById('pagina-seguinte-inativo').addEventListener('click', irParaPaginaSeguinte);
 
 const inputBuscaTemplate = document.getElementById("busca-template")
 
